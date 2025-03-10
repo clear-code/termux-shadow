@@ -79,7 +79,12 @@ static int group_put (const void *ent, FILE * file)
 		}
 	}
 
+#if HAVE_PUTRGRENT
 	return (putgrent (gr, file) == -1) ? -1 : 0;
+#else
+#warning "putgrent is not supported on Android"
+	return -1;
+#endif
 }
 
 static int group_close_hook (void)

@@ -50,7 +50,9 @@
 
 #include <dirent.h>
 
+#if HAVE_SHADOW_H
 #include <shadow.h>
+#endif
 #if defined(SHADOWGRP)
 #include "gshadow_.h"
 #endif

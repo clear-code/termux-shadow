@@ -26,7 +26,9 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <grp.h>
+#if HAVE_SHADOW_H
 #include <shadow.h>
+#endif
 #ifdef ENABLE_LASTLOG
 #include <lastlog.h>
 #endif /* ENABLE_LASTLOG */
@@ -41,11 +43,15 @@ extern int add_groups (const char *);
 #endif
 
 /* age.c */
+#if HAVE_STRUCT_SPWD
 extern void agecheck (/*@null@*/const struct spwd *);
 extern int expire (const struct passwd *, /*@null@*/const struct spwd *);
+#endif
 
 /* isexpired.c */
+#if HAVE_STRUCT_SPWD
 extern int isexpired (const struct passwd *, /*@null@*/const struct spwd *);
+#endif
 
 /* btrfs.c */
 #ifdef WITH_BTRFS
@@ -324,7 +330,9 @@ extern struct passwd *prefix_getpwnam(const char* name);
 extern int prefix_getpwnam_r(const char* name, struct passwd* pwd,
                              char* buf, size_t buflen, struct passwd** result);
 #endif
+#if HAVE_STRUCT_SPWD
 extern struct spwd *prefix_getspnam(const char* name);
+#endif
 extern struct group *prefix_getgr_nam_gid(const char *grname);
 extern void prefix_setpwent(void);
 extern struct passwd* prefix_getpwent(void);
@@ -334,7 +342,9 @@ extern struct group* prefix_getgrent(void);
 extern void prefix_endgrent(void);
 
 /* pwd2spwd.c */
+#if HAVE_STRUCT_SPWD
 extern struct spwd *pwd_to_spwd (const struct passwd *);
+#endif
 
 /* pwdcheck.c */
 #ifndef USE_PAM
@@ -419,8 +429,10 @@ extern /*@dependent@*/ /*@null@*/struct commonio_entry *__spw_get_head (void);
 extern void __spw_del_entry (const struct commonio_entry *ent);
 
 /* shadowmem.c */
+#if HAVE_STRUCT_SPWD
 extern /*@null@*/ /*@only@*/struct spwd *__spw_dup (const struct spwd *spent);
 extern void spw_free(/*@only@*/struct spwd *spent);
+#endif
 
 /* shell.c */
 extern int shell (const char *file, /*@null@*/const char *arg, char *const envp[]);
@@ -530,7 +542,9 @@ extern /*@null@*/ /*@only@*/struct group *xgetgrnam (const char *);
 /* xgetgrgid.c */
 extern /*@null@*/ /*@only@*/struct group *xgetgrgid (gid_t);
 /* xgetspnam.c */
+#if HAVE_STRUCT_SPWD
 extern /*@null@*/ /*@only@*/struct spwd *xgetspnam(const char *);
+#endif
 
 /* yesno.c */
 extern bool yes_or_no (bool read_only);

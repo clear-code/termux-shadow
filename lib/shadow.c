@@ -58,6 +58,7 @@ void endspent (void)
 	shadow = NULL;
 }
 
+#if HAVE_STRUCT_SPWD
 /*
  * fgetspent - get an entry from a /etc/shadow formatted stream
  */
@@ -108,6 +109,7 @@ struct spwd *getspnam (const char *name)
 	endspent ();
 	return (sp);
 }
+#endif
 #else
 extern int ISO_C_forbids_an_empty_translation_unit;
 #endif

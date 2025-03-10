@@ -22,6 +22,11 @@
 #include "string/strcmp/streq.h"
 
 
+#if __ANDROID__
+extern struct passwd *xandroid_polyfill_getpwnam (const char *cp);
+extern struct passwd *xandroid_polyfill_getpwuid (uid_t ruid);
+#endif
+
 /*@null@*/ /*@only@*/struct passwd *get_my_pwent (void)
 {
 	struct passwd *pw;
@@ -39,7 +44,15 @@
 	 * the original user, like getlogin() does).  Does this matter?
 	 */
 	if ((NULL != cp) && !streq(cp, "")) {
+#if __ANDROID__
+		/*
+		 * xgetpwnam was expanded as xandroid_polyfill_getpwnam
+		 * in xgetpwnam.c
+		 */
+		pw = xandroid_polyfill_getpwnam (cp);
+#else
 		pw = xgetpwnam (cp);
+#endif
 		if ((NULL != pw) && (pw->pw_uid == ruid)) {
 			return pw;
 		}
@@ -48,6 +61,14 @@
 		}
 	}
 
+#if __ANDROID__
+	/*
+	 * xgetpwuid was expanded as xandroid_polyfill_getpwuid
+	 * in xgetpwuid.c
+	 */
+	return xandroid_polyfill_getpwuid (ruid);
+#else
 	return xgetpwuid (ruid);
+#endif
 }
 

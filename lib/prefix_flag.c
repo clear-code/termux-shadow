@@ -154,10 +154,14 @@ extern struct group *prefix_getgrnam(const char *name)
 		fg = fopen(group_db_file, "rt");
 		if (!fg)
 			return NULL;
+#if HAVE_FGETGRENT
 		while ((grp = fgetgrent(fg)) != NULL) {
 			if (streq(name, grp->gr_name))
 				break;
 		}
+#else
+#warning "fgetgrent in prefix_getgrnam is not supported for Android"
+#endif
 		fclose(fg);
 		return grp;
 	}
@@ -174,10 +178,14 @@ extern struct group *prefix_getgrgid(gid_t gid)
 		fg = fopen(group_db_file, "rt");
 		if (!fg)
 			return NULL;
+#if HAVE_FGETGRENT
 		while ((grp = fgetgrent(fg)) != NULL) {
 			if (gid == grp->gr_gid)
 				break;
 		}
+#else
+#warning "fgetgrent in prefix_getgrgid is not supported for Android"
+#endif
 		fclose(fg);
 		return grp;
 	}
@@ -194,10 +202,14 @@ extern struct passwd *prefix_getpwuid(uid_t uid)
 		fg = fopen(passwd_db_file, "rt");
 		if (!fg)
 			return NULL;
+#if HAVE_FGETPWENT
 		while ((pwd = fgetpwent(fg)) != NULL) {
 			if (uid == pwd->pw_uid)
 				break;
 		}
+#else
+#warning "fgetpwent in prefix_getpwuid is not supported for Android"
+#endif
 		fclose(fg);
 		return pwd;
 	}
@@ -214,10 +226,14 @@ extern struct passwd *prefix_getpwnam(const char* name)
 		fg = fopen(passwd_db_file, "rt");
 		if (!fg)
 			return NULL;
+#if HAVE_FGETPWENT
 		while ((pwd = fgetpwent(fg)) != NULL) {
 			if (streq(name, pwd->pw_name))
 				break;
 		}
+#else
+#warning "fgetpwent in prefix_getpwnam is not supported for Android"
+#endif
 		fclose(fg);
 		return pwd;
 	}
@@ -225,7 +241,6 @@ extern struct passwd *prefix_getpwnam(const char* name)
 		return getpwnam(name);
 	}
 }
-#if HAVE_FGETPWENT_R
 extern int prefix_getpwnam_r(const char* name, struct passwd* pwd,
                              char* buf, size_t buflen, struct passwd** result)
 {
@@ -236,10 +251,14 @@ extern int prefix_getpwnam_r(const char* name, struct passwd* pwd,
 		fg = fopen(passwd_db_file, "rt");
 		if (!fg)
 			return errno;
+#if HAVE_FGETPWENT_R
 		while ((ret = fgetpwent_r(fg, pwd, buf, buflen, result)) == 0) {
 			if (streq(name, pwd->pw_name))
 				break;
 		}
+#else
+#warning "fgetpwent_r in prefix_getpwnam_r is not supported for Android"
+#endif
 		fclose(fg);
 		return ret;
 	}
@@ -247,7 +266,7 @@ extern int prefix_getpwnam_r(const char* name, struct passwd* pwd,
 		return getpwnam_r(name, pwd, buf, buflen, result);
 	}
 }
-#endif
+#ifdef HAVE_STRUCT_SPDW
 extern struct spwd *prefix_getspnam(const char* name)
 {
 	if (spw_db_file) {
@@ -268,6 +287,7 @@ extern struct spwd *prefix_getspnam(const char* name)
 		return getspnam(name);
 	}
 }
+#endif
 
 extern void prefix_setpwent(void)
 {
@@ -290,7 +310,12 @@ extern struct passwd* prefix_getpwent(void)
 	if (!fp_pwent) {
 		return NULL;
 	}
+#if HAVE_FGETPWENT
 	return fgetpwent(fp_pwent);
+#else
+#warning "fgetpwent in prefix_getpwent is not supported for Android"
+	return NULL;
+#endif
 }
 extern void prefix_endpwent(void)
 {
@@ -321,7 +346,12 @@ extern struct group* prefix_getgrent(void)
 	if (!group_db_file) {
 		return getgrent();
 	}
+#if HAVE_FGETGRENT
 	return fgetgrent(fp_grent);
+#else
+#warning "fgetgrent in prefix_getgrent is not supported for Android"
+	return NULL;
+#endif
 }
 extern void prefix_endgrent(void)
 {

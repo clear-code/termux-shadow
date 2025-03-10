@@ -37,7 +37,11 @@ LT_LIB_DLLOAD
 dnl Checks for libraries.
 
 dnl shadow now uses the libc's shadow implementation
-AC_CHECK_HEADER([shadow.h],,[AC_MSG_ERROR([You need a libc with shadow.h])])
+dnl AC_CHECK_HEADER([shadow.h],,[AC_MSG_ERROR([You need a libc with shadow.h])])
+AC_CHECK_HEADER([shadow.h],
+	[AC_DEFINE(HAVE_STRUCT_SPWD, 1, [Defined to 1 if you have struct spwd])],
+	[AC_MSG_WARN([No shadow.h for Android])]
+)
 
 AC_CHECK_FUNCS(arc4random_buf futimes \
 	getentropy getrandom getspnam getusershell \
@@ -62,6 +66,7 @@ dnl Checks for library functions.
 AC_FUNC_UTIME_NULL
 AC_REPLACE_FUNCS(putgrent putpwent putspent)
 AC_REPLACE_FUNCS(sgetgrent sgetpwent sgetspent)
+AC_REPLACE_FUNCS(l64a fgetgrent fgetpwent)
 
 AC_CHECK_FUNC(setpgrp)
 AC_CHECK_FUNC(secure_getenv, [AC_DEFINE(HAS_SECURE_GETENV,

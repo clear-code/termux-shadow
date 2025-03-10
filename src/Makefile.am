@@ -26,9 +26,9 @@ AM_CFLAGS = $(LIBBSD_CFLAGS)
 # and installation would be much simpler (just two directories,
 # $prefix/bin and $prefix/sbin, no install-data hacks...)
 
-bin_PROGRAMS   = login
-sbin_PROGRAMS  = nologin
-ubin_PROGRAMS  = faillog chage chfn chsh expiry gpasswd newgrp passwd
+bin_PROGRAMS   = 
+sbin_PROGRAMS  = 
+ubin_PROGRAMS  = 
 if ENABLE_SUBIDS
 ubin_PROGRAMS += newgidmap newuidmap
 endif
@@ -38,37 +38,20 @@ endif
 if WITH_SU
 bin_PROGRAMS  += su
 endif
-usbin_PROGRAMS = \
-	chgpasswd \
-	chpasswd \
-	groupadd \
-	groupdel \
-	groupmems \
-	groupmod \
-	grpck \
-	grpconv \
-	grpunconv \
-	logoutd \
-	newusers \
-	pwck \
-	pwconv \
-	pwunconv \
-	useradd \
-	userdel \
-	usermod \
-	vipw
+usbin_PROGRAMS = 
 
 # sulogin from sysvinit
-noinst_PROGRAMS = sulogin
+noinst_PROGRAMS = 
 
 suidusbins     =
 suidbins       =
-suidubins      = chage chfn chsh expiry gpasswd newgrp
+#suidubins      = chage chfn chsh expiry gpasswd newgrp
+suidubins      = 
 if WITH_SU
 suidbins      += su
 endif
 if !WITH_TCB
-suidubins += passwd
+#suidubins += passwd
 endif
 if ACCT_TOOLS_SETUID
 suidusbins += chgpasswd chpasswd groupadd groupdel groupmod newusers useradd userdel usermod
@@ -140,7 +123,7 @@ vipw_LDADD     = $(LDADD) $(LIBAUDIT) $(LIBSELINUX) $(LIBECONF)
 install-am: all-am
 	$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 	ln -sf newgrp	$(DESTDIR)$(ubindir)/sg
-	ln -sf vipw	$(DESTDIR)$(usbindir)/vigr
+#	ln -sf vipw	$(DESTDIR)$(usbindir)/vigr
 	set -e; for i in $(suidbins); do \
 		chmod $(suidperms) $(DESTDIR)$(bindir)/$$i; \
 	done

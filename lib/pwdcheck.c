@@ -12,7 +12,9 @@
 #ifndef USE_PAM
 
 #include <stdio.h>
+#if HAVE_SHADOW_H
 #include <shadow.h>
+#endif
 
 #include "attr.h"
 #include "prototypes.h"
@@ -20,6 +22,7 @@
 #include "pwauth.h"
 #include "shadowlog.h"
 
+#if HAVE_STRUCT_SPWD
 void passwd_check (const char *user, const char *passwd, MAYBE_UNUSED const char *progname)
 {
 	struct spwd *sp;
@@ -35,6 +38,7 @@ void passwd_check (const char *user, const char *passwd, MAYBE_UNUSED const char
 		exit (EXIT_FAILURE);
 	}
 }
+#endif
 #else			/* USE_PAM */
 extern int ISO_C_forbids_an_empty_translation_unit;
 #endif			/* USE_PAM */

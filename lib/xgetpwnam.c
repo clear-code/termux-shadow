@@ -35,7 +35,12 @@
 #define ARG_TYPE	const char *
 #define ARG_NAME	name
 #define DUP_FUNCTION	__pw_dup
+#ifndef __ANDROID__
 #define HAVE_FUNCTION_R 1
+#else
+/* No reentrant version: android_polyfill_getpwnam_r */
+#define HAVE_FUNCTION_R 0
+#endif
 
 #include "xgetXXbyYY.c"
 

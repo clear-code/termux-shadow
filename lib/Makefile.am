@@ -26,7 +26,6 @@ libshadow_la_SOURCES = \
 	addgrps.c \
 	adds.c \
 	adds.h \
-	age.c \
 	agetpass.c \
 	agetpass.h \
 	alloc/calloc.c \
@@ -122,7 +121,6 @@ libshadow_la_SOURCES = \
 	hushed.c \
 	idmapping.h \
 	idmapping.c \
-	isexpired.c \
 	limits.c \
 	list.c \
 	lockpw.c \
@@ -147,7 +145,6 @@ libshadow_la_SOURCES = \
 	pwio.c \
 	pwio.h \
 	pwd_init.c \
-	pwd2spwd.c \
 	pwdcheck.c \
 	pwmem.c \
 	remove_tree.c \
@@ -169,7 +166,6 @@ libshadow_la_SOURCES = \
 	setupenv.c \
 	sgetgrent.c \
 	sgetpwent.c \
-	sgetspent.c \
 	sgroupio.c \
 	sgroupio.h\
 	shadow.c \
@@ -180,7 +176,6 @@ libshadow_la_SOURCES = \
 	shadowlog.c \
 	shadowlog.h \
 	shadowlog_internal.h \
-	shadowmem.c \
 	shell.c \
 	sizeof.h \
 	spawn.c \
@@ -253,7 +248,6 @@ libshadow_la_SOURCES = \
 	xgetpwuid.c \
 	xgetgrnam.c \
 	xgetgrgid.c \
-	xgetspnam.c \
 	yesno.c
 
 if WITH_TCB

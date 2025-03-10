@@ -14,7 +14,9 @@
 
 #include "prototypes.h"
 #include "defines.h"
+#if HAVE_SHADOW_H
 #include <shadow.h>
+#endif
 #include <stdio.h>
 #include "commonio.h"
 #include "getdef.h"
@@ -24,6 +26,7 @@
 #include "tcbfuncs.h"
 #endif				/* WITH_TCB */
 
+#if HAVE_STRUCT_SPWD
 static /*@null@*/ /*@only@*/void *shadow_dup (const void *ent)
 {
 	const struct spwd *sp = ent;
@@ -65,6 +68,32 @@ static int shadow_put (const void *ent, FILE * file)
 
 	return (putspent (sp, file) == -1) ? -1 : 0;
 }
+#else
+static /*@null@*/ /*@only@*/void *shadow_dup (const void *ent)
+{
+	return NULL;
+}
+
+static void
+shadow_free(/*@only@*/void *ent)
+{
+}
+
+static const char *shadow_getname (const void *ent)
+{
+	return NULL;
+}
+
+static void *shadow_parse (const char *line)
+{
+	return NULL;
+}
+
+static int shadow_put (const void *ent, FILE * file)
+{
+	return -1;
+}
+#endif
 
 static struct commonio_ops shadow_ops = {
 	shadow_dup,

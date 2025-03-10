@@ -13,6 +13,10 @@
 #include "prototypes.h"
 #include "getdef.h"
 
+#if __ANDROID__
+#include <netinet/in.h>
+#include <netinet/in6.h>
+#endif
 #include <utmpx.h>
 #include <assert.h>
 #include <sys/param.h>

@@ -64,7 +64,12 @@ static int passwd_put (const void *ent, FILE * file)
 		return -1;
 	}
 
+#if HAVE_PUTPWENT
 	return (putpwent (pw, file) == -1) ? -1 : 0;
+#else
+#warning "putpwent is not supported on Android"
+	return -1;
+#endif
 }
 
 static struct commonio_ops passwd_ops = {
