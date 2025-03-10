@@ -320,6 +320,41 @@ static /*@observer@*/void YESCRYPT_salt_cost_to_buf (char *buf, unsigned long co
 #endif /* USE_YESCRYPT */
 
 #if !USE_XCRYPT_GENSALT
+#if !defined(HAVE_L64A)
+static /*@observer@*/char *l64a (long value)
+{
+       static char buf[8];
+       char *s = buf;
+       int digit;
+       int i;
+
+       if (value < 0) {
+               errno = EINVAL;
+               return(NULL);
+       }
+
+       for (i = 0; value != 0 && i < 6; i++) {
+               digit = value & 0x3f;
+
+               if (digit < 2) {
+                       *s = digit + '.';
+               } else if (digit < 12) {
+                       *s = digit + '0' - 2;
+               } else if (digit < 38) {
+                       *s = digit + 'A' - 12;
+               } else {
+                       *s = digit + 'a' - 38;
+               }
+
+               value >>= 6;
+               s++;
+       }
+
+       *s = '\0';
+
+       return buf;
+}
+#endif /* !USE_XCRYPT_GENSALT && !defined(HAVE_L64A) */
 static /*@observer@*/const char *gensalt (size_t salt_size)
 {
 	static char salt[MAX_SALT_SIZE + 6];
